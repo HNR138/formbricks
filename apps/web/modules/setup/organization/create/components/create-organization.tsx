@@ -37,9 +37,14 @@ export const CreateOrganization = () => {
       const createOrganizationResponse = await createOrganizationAction({ organizationName });
       if (createOrganizationResponse?.data) {
         router.push(`/setup/organization/${createOrganizationResponse.data.id}/invite`);
+      } else if (createOrganizationResponse?.serverError) {
+        toast.error(createOrganizationResponse.serverError);
+        setIsSubmitting(false);
+        return;
       }
     } catch (error) {
-      toast.error("Some error occurred while creating organization");
+      console.error(error);
+      toast.error(t("setup.organization.create.error"));
       setIsSubmitting(false);
     }
   };
